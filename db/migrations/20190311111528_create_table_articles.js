@@ -11,7 +11,8 @@ exports.up = function(knex, Promise) {
           .text('body', 'UTF8')
           .notNullable();
         articleTable
-          .integer('votes');
+          .integer('votes')
+          .defaultTo(0);
         articleTable
           .string('topic');
         articleTable
@@ -25,7 +26,8 @@ exports.up = function(knex, Promise) {
           .references('username')
           .on('users');
         articleTable
-          .string('created_at');
+          .string('created_at')
+          .defaultTo(new Date ())
       })
 };
 

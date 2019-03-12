@@ -60,5 +60,31 @@ describe('app', () => {
                     });
             });
         });
+        describe('/articles', () => {
+            it('GET returns (200) articles in database', () => {
+                return request
+                    .get('/api/articles')
+                    .expect(200)
+                    .then(({ body }) => {
+                        body.articles.forEach(article => {
+                            expect(Object.keys(article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']);
+                        });
+                    })
+            });
+            it('POST returns (201) article added to database', () => {
+                return request
+                    .post('/api/articles')
+                    .send({
+                        title: 'Cloud Juice ep 7: Wetherspoons',
+                        body: '3/10, worst tap water I have ever tasted, Adam Sandler would be ashamed.',
+                        topic: 'mitch',
+                        author: 'rogersop'
+                    })
+                    .expect(201)
+                    .then(({ body }) => {
+                        expect(Object.keys(body.article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']);
+                    });
+            });
+        });
     });
 });
