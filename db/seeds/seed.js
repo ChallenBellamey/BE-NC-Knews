@@ -1,5 +1,4 @@
 const createRef = require('../../utils/createRef').createRef;
-
 const ENV = process.env.NODE_ENV || 'development';
 const { articleData, commentData, topicData, userData } = require(`../data/${ENV}-data/index`);
 
