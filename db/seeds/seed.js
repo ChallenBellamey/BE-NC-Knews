@@ -38,8 +38,6 @@ exports.seed = (knex, Promise) => {
                 delete comment.created_by;
             })
             return knex('comments')
-                .insert(commentData)
-                .returning('*');
+                .insert(commentData);
         })
-        .then(() => console.log('done'))
 }
