@@ -35,6 +35,14 @@ describe('app', () => {
                         expect(Object.keys(body.user)).to.eql(['username', 'avatar_url', 'name']);
                     });
             });
+            it('GET with username parameter returns (200) user information', () => {
+                return request
+                    .get('/api/users/butter_bridge')
+                    .expect(200)
+                    .then(({ body }) => {
+                        expect(body.user.username).to.equal('butter_bridge');
+                    });
+            });
         });
         describe('/topics', () => {
             it('GET returns (200) topics in database', () => {
@@ -84,6 +92,29 @@ describe('app', () => {
                     .then(({ body }) => {
                         expect(Object.keys(body.article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']);
                     });
+            });
+            it('GET returns (200) and article information when passed an article_id parameter', () => {
+                return request
+                    .get('/api/articles/1')
+                    .expect(200)
+                    .then(({ body }) => {
+                        expect(body.article.article_id).to.equal(1);
+                    })
+            });
+            it('PATCH returns (201) and article information when passed an article_id parameter', () => {
+                return request
+                    .patch('/api/articles/1')
+                    .send({title: 'HACKED'})
+                    .expect(201)
+                    .then(({ body }) => {
+                        expect(body.article.article_id).to.equal(1);
+                        expect(body.article.title).to.equal('HACKED');
+                    })
+            });
+            it('DELETE returns (204) and message \'Article deleted\' when passed an article_id parameter', () => {
+                return request
+                    .delete('/api/articles/1')
+                    .expect(204)
             });
         });
     });

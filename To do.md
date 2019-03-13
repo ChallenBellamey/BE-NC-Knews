@@ -54,26 +54,28 @@ Data has been provided for both testing and development environments so you will
 Your server should have the following end-points:
 
 ```http
-GET /api/topics
-POST /api/topics
+<!-- GET /api/topics
+POST /api/topics -->
 
-GET /api/articles
-POST /api/articles
+<!-- GET /api/articles
+POST /api/articles -->
 
-GET /api/articles/:article_id
-PATCH /api/articles/:article_id
-DELETE /api/articles/:article_id
+<!-- GET /api/users
+POST /api/users -->
+
+<!-- GET /api/users/:username -->
+
+<!-- GET /api/articles/:article_id -->
+<!-- PATCH /api/articles/:article_id -->
+<!-- DELETE /api/articles/:article_id -->
+
+
 
 GET /api/articles/:article_id/comments
 POST /api/articles/:article_id/comments
 
 PATCH /api/comments/:comment_id
 DELETE /api/comments/:comment_id
-
-GET /api/users
-POST /api/users
-
-GET /api/users/:username
 
 GET /api
 ```

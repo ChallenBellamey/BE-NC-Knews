@@ -1,9 +1,9 @@
-const { selectAllUsers, insertUser } = require('../models/users-models');
+const { selectUsers, insertUser, selectUser } = require('../models/users-models');
 
 const getUsers = (req, res, next) => {
-    return selectAllUsers()
+    return selectUsers()
         .then(users => {
-            res.status(200).send({ users })
+            res.status(200).send({ users });
         })
         .catch(err => {
             next(err);
@@ -18,6 +18,13 @@ const postUser = (req, res, next) => {
         .catch(err => {
             next(err);
         })
-}
+};
 
-module.exports = { getUsers, postUser };
+const getUser = (req, res, next) => {
+    return selectUser(req.params.username)
+        .then(([user]) => {
+            res.status(200).send({ user });
+        })
+};
+
+module.exports = { getUsers, postUser, getUser };

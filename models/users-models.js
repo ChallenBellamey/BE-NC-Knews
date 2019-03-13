@@ -1,6 +1,6 @@
 const { connection } = require('../connection')
 
-const selectAllUsers = () => {
+const selectUsers = () => {
     return connection('users')
         .select('*')
 };
@@ -11,4 +11,10 @@ const insertUser = (user) => {
         .returning('*')
 };
 
-module.exports = { selectAllUsers, insertUser };
+const selectUser = (username) => {
+    return connection('users')
+        .select('*')
+        .where('username', username)
+};
+
+module.exports = { selectUsers, insertUser, selectUser };
