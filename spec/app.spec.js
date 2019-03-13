@@ -35,6 +35,30 @@ describe('app', () => {
                         expect(Object.keys(body.user)).to.eql(['username', 'avatar_url', 'name']);
                     });
             });
+            it('POST returns (422) when posting user with username that already exists', () => {
+                return request
+                    .post('/api/users')
+                    .send({
+                        username: 'butter_bridge',
+                        avatar_url: 'www.challenbellamey.com',
+                        name: 'Challen Bellamey'
+                    })
+                    .expect(422)
+                    .then(({ body }) => {
+                        expect(body.message).to.eql('User already exists!');
+                    });
+            });
+            it('POST returns (400) when posting user that violates database columns', () => {
+                return request
+                    .post('/api/users')
+                    .send({
+                        name: 'Challen Bellamey'
+                    })
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.message).to.eql('User information not valid!');
+                    });
+            });
             it('GET with username parameter returns (200) user information', () => {
                 return request
                     .get('/api/users/butter_bridge')
@@ -42,6 +66,14 @@ describe('app', () => {
                     .then(({ body }) => {
                         expect(body.user.username).to.equal('butter_bridge');
                     });
+            });
+            it('GET returns (404) user not found when passed username parameter of username that does not exist', () => {
+                return request
+                    .get('/api/users/non-existent')
+                    .expect(404)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('User not found!');
+                    })
             });
         });
         describe('/topics', () => {
@@ -65,6 +97,29 @@ describe('app', () => {
                     .expect(201)
                     .then(({ body }) => {
                         expect(Object.keys(body.topic)).to.eql(['slug', 'description']);
+                    });
+            });
+            it('POST returns (422) when posting topic with slug that already exists', () => {
+                return request
+                    .post('/api/topics')
+                    .send({
+                        description: 'The man, the Mitch, the legend',
+                        slug: 'mitch',
+                    })
+                    .expect(422)
+                    .then(({ body }) => {
+                        expect(body.message).to.eql('Topic already exists!');
+                    });
+            });
+            it('POST returns (400) when posting topic that violates database columns', () => {
+                return request
+                    .post('/api/topics')
+                    .send({
+                        description: 'A discussion over what happens if the slug is not declared.'
+                    })
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.message).to.eql('Topic information not valid!');
                     });
             });
         });
@@ -93,12 +148,32 @@ describe('app', () => {
                         expect(Object.keys(body.article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']);
                     });
             });
+            it('POST returns (400) when posting article that violates database columns', () => {
+                return request
+                    .post('/api/articles')
+                    .send({
+                        title: 'I will fail. An article\'s story',
+                        description: 'A discussion over what happens if an incorrect property is added.'
+                    })
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.message).to.eql('Article information not valid!');
+                    });
+            });
             it('GET returns (200) and article information when passed an article_id parameter', () => {
                 return request
                     .get('/api/articles/1')
                     .expect(200)
                     .then(({ body }) => {
                         expect(body.article.article_id).to.equal(1);
+                    })
+            });
+            it('GET returns (404) when passed an article_id parameter that does not exist', () => {
+                return request
+                    .get('/api/articles/100')
+                    .expect(404)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('Article not found!')
                     })
             });
             it('PATCH returns (201) and article information when passed an article_id parameter', () => {
@@ -109,6 +184,14 @@ describe('app', () => {
                     .then(({ body }) => {
                         expect(body.article.article_id).to.equal(1);
                         expect(body.article.title).to.equal('HACKED');
+                    })
+            });
+            it('PATCH returns (404) when passed article_id that does not exist', () => {
+                return request
+                    .patch('/api/articles/100')
+                    .expect(404)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('Article not found!')
                     })
             });
             it('DELETE returns (204) and message \'Article deleted\' when passed an article_id parameter', () => {
