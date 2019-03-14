@@ -8,13 +8,15 @@ exports.up = function(knex, Promise) {
       commentTable
         .foreign('author')
         .references('username')
-        .on('users');
+        .on('users')
+        .onDelete('CASCADE');
       commentTable
         .integer('article_id');
       commentTable
         .foreign('article_id')
         .references('article_id')
-        .on('articles');
+        .on('articles')
+        .onDelete('CASCADE');
       commentTable
         .integer('votes');
       commentTable

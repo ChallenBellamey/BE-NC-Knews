@@ -5,7 +5,9 @@ const getArticles = (req, res, next) => {
         .then((articles) => {
             res.status(200).send({ articles });
         })
-        .catch(next);
+        .catch(err => {
+            next({code: 500, message: `Unhandled error at getArticles: ${err.code} ${err.message}`})
+        })
 };
 
 const postArticle = (req, res, next) => {
@@ -15,32 +17,45 @@ const postArticle = (req, res, next) => {
         })
         .catch(err => {
             if (err.code = '23502') {
-                next({ code: 400, message: 'Article information not valid!' });
+                err = { code: 400, message: 'Article information not valid!' };
             } else {
-                next(err);
+                err = { code: 500, message: `Unhandled error at postArticle: ${err.code} ${err.message}`};
             };
+            next(err);
         });
 };
 
 const getArticle = (req, res, next) => {
     return selectArticle(req.params.article_id)
         .then(([article]) => {
-            if (article === undefined) {
-                throw({ code: 404, message: 'Article not found!' })
-            } else {
+            if (article) {
                 res.status(200).send({ article });
+            } else {
+                throw({ code: 404, message: 'Article not found!' })
             };  
         })
-        .catch(next);
+        .catch(err => {
+            if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at getArticle: ${err.code} ${err.message}`};
+            };
+            next(err);
+        });
 };
 
 const patchArticle = (req, res, next) => {
     return updateArticle(req.params.article_id, req.body)
         .then(([article]) => {
-            res.status(201).send({ article });
+            if (article) {
+                res.status(201).send({ article });
+            } else {
+                throw({ code: 404, message: 'Article not found!' });
+            };
         })
         .catch(err => {
-            next({ code: 404, message: 'Article not found!' });
+            if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at patchArticle: ${err.code} ${err.message}`};
+            };
+            next(err);
         });
 };
 
@@ -49,7 +64,9 @@ const deleteArticle = (req, res, next) => {
         .then(() => {
             res.sendStatus(204);
         })
-        .catch(next);
+        .catch(err => {
+            next({ code: 500, message: `Unhandled error at deleteArticle: ${err.code} ${err.message}`});
+        })
 };
 
 module.exports = { getArticles, postArticle, getArticle, patchArticle, deleteArticle };

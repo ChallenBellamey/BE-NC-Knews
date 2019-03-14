@@ -18,13 +18,15 @@ exports.up = function(knex, Promise) {
       articleTable
         .foreign('topic')
         .references('slug')
-        .on('topics');
+        .on('topics')
+        .onDelete('CASCADE');
       articleTable
         .string('author');
       articleTable
         .foreign('author')
         .references('username')
-        .on('users');
+        .on('users')
+        .onDelete('CASCADE');
       articleTable
         .string('created_at')
         .defaultTo(new Date ())

@@ -69,13 +69,13 @@ POST /api/users -->
 <!-- PATCH /api/articles/:article_id -->
 <!-- DELETE /api/articles/:article_id -->
 
+<!-- GET /api/articles/:article_id/comments -->
+<!-- POST /api/articles/:article_id/comments -->
+
+<!-- PATCH /api/comments/:comment_id -->
+<!-- DELETE /api/comments/:comment_id -->
 
 
-GET /api/articles/:article_id/comments
-POST /api/articles/:article_id/comments
-
-PATCH /api/comments/:comment_id
-DELETE /api/comments/:comment_id
 
 GET /api
 ```

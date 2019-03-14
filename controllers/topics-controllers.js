@@ -5,7 +5,9 @@ const getTopics = (req, res, next) => {
         .then(topics => {
             res.status(200).send({ topics });
         })
-        .catch(next);
+        .catch(err => {
+            next({code: 500, message: 'Unhandled error at getTopics'})
+        })
 };
 
 const postTopic = (req, res, next) => {

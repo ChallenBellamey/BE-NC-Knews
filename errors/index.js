@@ -23,4 +23,9 @@ const handle422 = (err, req, res, next) => {
     };
 };
 
-module.exports = { handle400, handle404, handle422 };
+const handle500 = (err, req, res, next) => {
+    console.log(err.message);
+    res.status(500).send({ message: err.message });
+};
+
+module.exports = { handle400, handle404, handle422, handle500 };

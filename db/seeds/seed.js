@@ -17,26 +17,35 @@ exports.seed = (knex, Promise) => {
                 .returning('*');
         })
         .then(userRows => {
-            articleData.forEach(article => {
-                const date = article.created_at;
-                article.created_at = new Date (date);
+            let newArticleData = [ ...articleData ];
+            newArticleData = newArticleData.map(article => {
+                const newArticle = { ...article };
+                const date = newArticle.created_at;
+                newArticle.created_at = new Date (date);
+
+                return newArticle;
             })
             return knex('articles')
-                .insert(articleData)
+                .insert(newArticleData)
                 .returning('*');
         })
         .then(articleRows => {
             const articleRef1 = createRef(articleRows, 'title', 'article_id');
-            commentData.forEach(comment => {
-                comment.created_at = new Date (comment.created_at);
+            let newCommentData = [ ...commentData ];
+            newCommentData = newCommentData.map(comment => {
+                const newComment = { ...comment };
 
-                comment.article_id = articleRef1[comment.belongs_to];
-                delete comment.belongs_to;
+                newComment.created_at = new Date (newComment.created_at);
 
-                comment.author = comment.created_by;
-                delete comment.created_by;
+                newComment.article_id = articleRef1[newComment.belongs_to];
+                delete newComment.belongs_to;
+
+                newComment.author = newComment.created_by;
+                delete newComment.created_by;
+
+                return newComment;
             })
             return knex('comments')
-                .insert(commentData);
+                .insert(newCommentData);
         })
 }

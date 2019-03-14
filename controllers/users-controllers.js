@@ -5,7 +5,9 @@ const getUsers = (req, res, next) => {
         .then(users => {
             res.status(200).send({ users });
         })
-        .catch(next);
+        .catch(err => {
+            next({code: 500, message: 'Unhandled error at getUsers'})
+        })
 };
 
 const postUser = (req, res, next) => {
