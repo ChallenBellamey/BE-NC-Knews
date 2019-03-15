@@ -1,8 +1,18 @@
 const { connection } = require('../connection');
 
-const selectArticles = () => {
-    return connection('articles')
-        .select('*');
+const selectArticles = ({ sort_by = 'created_at', order = 'desc', ...conditions }) => {
+    const whereConditions = {};
+    Object.keys(conditions).forEach(conditionKey => {
+        whereConditions[`articles.${conditionKey}`] = conditions[conditionKey];
+    });
+    return connection
+        .select('articles.article_id', 'articles.title', 'articles.body', 'articles.votes', 'articles.topic', 'articles.author', 'articles.created_at')
+        .from('articles')
+        .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+        .count('comments.article_id as comment_count')
+        .groupBy('comments.article_id', 'articles.article_id')
+        .where(whereConditions)
+        .orderBy(sort_by, order)
 };
 
 const insertArticle = (article) => {
@@ -17,10 +27,11 @@ const selectArticle = (article_id) => {
         .where('article_id', article_id)
 };
 
-const updateArticle = (article_id, updates) => {
+const updateArticle = (article_id, { inc_vote = 0, ...invalid }) => {
     return connection('articles')
         .where('article_id', article_id)
-        .update(updates, ['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at'])
+        .increment('votes', inc_vote)
+        .returning('*');
 };
 
 const delArticle = (article_id) => {

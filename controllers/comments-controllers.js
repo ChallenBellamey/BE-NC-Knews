@@ -1,7 +1,7 @@
 const { selectCommentsByArticle, insertCommentByArticle, updateComment, delComment } = require('../models/comments-models')
 
 const getCommentsByArticle = (req, res, next) => {
-    selectCommentsByArticle(req.params.article_id)
+    selectCommentsByArticle(req.params.article_id, req.query)
         .then(comments => {
             res.status(200).send({ comments })
         })

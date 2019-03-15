@@ -130,8 +130,40 @@ describe('app', () => {
                     .expect(200)
                     .then(({ body }) => {
                         body.articles.forEach(article => {
-                            expect(Object.keys(article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']);
+                            expect(Object.keys(article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count']);
                         });
+                    })
+            });
+            it('GET returns (200) articles in database when author query is added', () => {
+                return request 
+                    .get('/api/articles?author=butter_bridge')
+                    .expect(200)
+                    .then(({ body }) => {
+                        body.articles.forEach(article => {
+                            expect(article.author === 'butter_bridge');
+                        });
+                    })
+            });
+            it('GET returns (200) articles in database when topic query is added', () => {
+                return request 
+                    .get('/api/articles?topic=mitch')
+                    .expect(200)
+                    .then(({ body }) => {
+                        body.articles.forEach(article => {
+                            expect(article.topic === 'mitch');
+                        });
+                    })
+            });
+            it('GET  returns (200) articles in database when sort_by query is added', () => {
+                return request
+                    .get('/api/articles?sort_by=article_id&order=asc')
+                    .expect(200)
+                    .then(({body}) => {
+                        body.articles.forEach((article, index) => {
+                            if (index !== 0) {
+                                expect(article.article_id > body.articles[index - 1].article_id).to.be.true;
+                            };
+                        })
                     })
             });
             it('POST returns (201) article added to database', () => {
@@ -176,23 +208,13 @@ describe('app', () => {
                         expect(body.message).to.equal('Article not found!')
                     })
             });
-            it('PATCH returns (201) and article information when passed an article_id parameter', () => {
+            it('PATCH (201) increments vote when passed an inc_vote property', () => {
                 return request
                     .patch('/api/articles/1')
-                    .send({title: 'HACKED'})
+                    .send({inc_vote: 1})
                     .expect(201)
-                    .then(({ body }) => {
-                        expect(body.article.article_id).to.equal(1);
-                        expect(body.article.title).to.equal('HACKED');
-                    })
-            });
-            it('PATCH returns (404) when passed article_id that does not exist', () => {
-                return request
-                    .patch('/api/articles/100')
-                    .send({title: 'HACKED!'})
-                    .expect(404)
-                    .then(({ body }) => {
-                        expect(body.message).to.equal('Article not found!')
+                    .then(({body}) => {
+                        expect(body.article.votes).to.equal(101);
                     })
             });
             it('DELETE returns (204) when passed an article_id parameter', () => {
@@ -210,6 +232,18 @@ describe('app', () => {
                             body.comments.forEach(comment => {
                                 expect(Object.keys(comment)).to.eql(['comment_id', 'author', 'article_id', 'votes', 'created_at', 'body']);
                             });
+                        })
+                });
+                it('GET by article_id returns (200) and an array of comments when sort_by query is added', () => {
+                    return request
+                        .get('/api/articles/9/comments?sort_by=comment_id&order=asc')
+                        .expect(200)
+                        .then(({body}) => {
+                            body.comments.forEach((comment, index) => {
+                                if (index !== 0) {
+                                    expect(comment.comment_id > body.comments[index - 1].comment_id).to.be.true;
+                                };
+                            })
                         })
                 });
                 it('POST by article_id returns (201) and the posted comment', () => {

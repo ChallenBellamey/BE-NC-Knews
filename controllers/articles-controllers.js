@@ -1,7 +1,7 @@
 const { selectArticles, insertArticle, selectArticle, updateArticle, delArticle } = require('../models/articles-models');
 
 const getArticles = (req, res, next) => {
-    return selectArticles()
+    selectArticles(req.query)
         .then((articles) => {
             res.status(200).send({ articles });
         })
@@ -11,7 +11,7 @@ const getArticles = (req, res, next) => {
 };
 
 const postArticle = (req, res, next) => {
-    return insertArticle(req.body)
+    insertArticle(req.body)
         .then(([article]) => {
             res.status(201).send({ article });
         })
@@ -26,7 +26,7 @@ const postArticle = (req, res, next) => {
 };
 
 const getArticle = (req, res, next) => {
-    return selectArticle(req.params.article_id)
+    selectArticle(req.params.article_id)
         .then(([article]) => {
             if (article) {
                 res.status(200).send({ article });
@@ -43,7 +43,7 @@ const getArticle = (req, res, next) => {
 };
 
 const patchArticle = (req, res, next) => {
-    return updateArticle(req.params.article_id, req.body)
+    updateArticle(req.params.article_id, req.body)
         .then(([article]) => {
             if (article) {
                 res.status(201).send({ article });
@@ -60,7 +60,7 @@ const patchArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-    return delArticle(req.params.article_id)
+    delArticle(req.params.article_id)
         .then(() => {
             res.sendStatus(204);
         })
