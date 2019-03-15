@@ -27,11 +27,10 @@ const selectArticle = (article_id) => {
         .where('article_id', article_id)
 };
 
-const updateArticle = (article_id, { inc_vote = 0, ...invalid }) => {
+const updateArticle = (article_id, { inc_votes = 0, ...updates }) => {
     return connection('articles')
         .where('article_id', article_id)
-        .increment('votes', inc_vote)
-        .returning('*');
+        .update({'votes': connection.raw(`votes + ${inc_votes}`), ...updates }, ['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at'])
 };
 
 const delArticle = (article_id) => {

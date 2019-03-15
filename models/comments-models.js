@@ -16,10 +16,10 @@ const insertCommentByArticle = (article_id, comment) => {
         .returning('*')
 };
 
-const updateComment = (comment_id, updates) => {
+const updateComment = (comment_id, { inc_votes = 0, ...updates }) => {
     return connection('comments')
         .where('comment_id', comment_id)
-        .update(updates, ['comment_id', 'author', 'article_id', 'votes', 'created_at', 'body'])
+        .update({'votes': connection.raw(`votes + ${inc_votes}`), ...updates }, ['comment_id', 'author', 'article_id', 'votes', 'created_at', 'body'])
 };
 
 const delComment = (comment_id) => {

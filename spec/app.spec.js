@@ -208,10 +208,21 @@ describe('app', () => {
                         expect(body.message).to.equal('Article not found!')
                     })
             });
+            it('PATCH (201) updates article when sent updates in body', () => {
+                return request
+                    .patch('/api/articles/1')
+                    .send({
+                        body: 'Oops I meant this instead!'
+                    })
+                    .expect(201)
+                    .then(({body}) => {
+                        expect(body.article.body).to.equal('Oops I meant this instead!');
+                    })
+            });
             it('PATCH (201) increments vote when passed an inc_vote property', () => {
                 return request
                     .patch('/api/articles/1')
-                    .send({inc_vote: 1})
+                    .send({inc_votes: 1})
                     .expect(201)
                     .then(({body}) => {
                         expect(body.article.votes).to.equal(101);
@@ -302,6 +313,17 @@ describe('app', () => {
                     .expect(201)
                     .then(({body}) => {
                         expect(body.comment.body).to.equal('Oops I meant to say this instead.');
+                    })
+            });
+            it('PATCH returns (201) and updates the vote count when sent inc_votes', () => {
+                return request
+                    .patch('/api/comments/1')
+                    .send({
+                        inc_votes: 1
+                    })
+                    .expect(201)
+                    .then(({body}) => {
+                        expect(body.comment.votes).to.equal(17);
                     })
             });
             it('DELETE returns (204)', () => {
