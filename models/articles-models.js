@@ -1,10 +1,17 @@
 const { connection } = require('../connection');
 
-const selectArticles = ({ sort_by = 'created_at', order = 'desc', ...conditions }) => {
+const selectArticles = ({ sort_by = 'created_at', order = 'desc', limit, p = 0, ...conditions }) => {
     const whereConditions = {};
     Object.keys(conditions).forEach(conditionKey => {
         whereConditions[`articles.${conditionKey}`] = conditions[conditionKey];
     });
+    let offset;
+    if (limit) {
+        offset = (p - 1) * limit;
+    } else {
+        limit = 10**100;
+        offset = 0;
+    };
     return connection
         .select('articles.article_id', 'articles.title', 'articles.body', 'articles.votes', 'articles.topic', 'articles.author', 'articles.created_at')
         .from('articles')
@@ -13,6 +20,8 @@ const selectArticles = ({ sort_by = 'created_at', order = 'desc', ...conditions 
         .groupBy('comments.article_id', 'articles.article_id')
         .where(whereConditions)
         .orderBy(sort_by, order)
+        .limit(limit)
+        .offset(offset)
 };
 
 const insertArticle = (article) => {

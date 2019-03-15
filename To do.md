@@ -91,19 +91,6 @@ These have been split into **must haves** and some slightly more advanced _nice 
 
 
 
-```http
-GET /api/articles
-```
-
-##### If time (the following will make pagination easier when you get to building your front-end application)
-- accept the following queries:
-  * `limit`, which limits the number of responses (defaults to 10)
-  * `p`, stands for page which specifies the page at which to start (calculated using limit)
-- add a `total_count` property, displaying the total number of articles (this should display the total number of articles with any filters applied, discounting the limit)
-
-
-
-
 
 
 ```http
@@ -117,75 +104,7 @@ GET /api/articles/:article_id/comments
 
 
 
-```http
-PATCH /api/comments/:comment_id
-```
-##### Request body accepts
-- an object in the form `{ inc_votes: newVote }`
 
-  * `newVote` will indicate how much the `votes` property in the database should be updated by
-
-  e.g.
-
-  `{ inc_votes : 1 }` would increment the current article's vote property by 1
-
-  `{ inc_votes : -1 }` would decrement the current article's vote property by 1
-
-##### Responds with
-- the updated comment
-
-***
-
-```http
-DELETE /api/comments/:comment_id
-```
-
-##### Should
-- delete the given comment by `comment_id`
-
-##### Responds with
-- status 204 and no content
-
-***
-
-```http
-GET /api/users
-```
-
-##### Responds with
-- an array of user objects, each of which should have the following properties:
-  * `username`
-  * `avatar_url`
-  * `name`
-
-***
-
-```http
-POST /api/users
-```
-
-##### Request body accepts
-- an object containing the following properties:
-  * `username`
-  * `avatar_url`
-  * `name`
-
-##### Responds with
-- the posted user
-
-***
-
-```http
-GET /api/users/:username
-```
-
-##### Responds with
-- a user object which should have the following properties:
-  * `username`
-  * `avatar_url`
-  * `name`
-
-***
 
 ```http
 GET /api

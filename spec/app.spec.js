@@ -26,14 +26,14 @@ describe('app', () => {
                 return request
                     .post('/api/users')
                     .send({
-                        username: 'Challen',
+                        username: 'challen',
                         avatar_url: 'www.challenbellamey.com',
                         name: 'Challen Bellamey'
                     })
                     .expect(201)
                     .then(({ body }) => {
                         expect(Object.keys(body.user)).to.eql(['username', 'avatar_url', 'name']);
-                    });
+                    })
             });
             it('POST returns (422) when posting user with username that already exists', () => {
                 return request
@@ -164,6 +164,15 @@ describe('app', () => {
                                 expect(article.article_id > body.articles[index - 1].article_id).to.be.true;
                             };
                         })
+                    })
+            });
+            it('GET returns (200) limited and pagenated articles when limit and p queries are added', () => {
+                return request
+                    .get('/api/articles?limit=5&p=2')
+                    .expect(200)
+                    .then(({body}) => {
+                        expect(body.articles[0].article_id).to.equal(6);
+                        expect(body.articles[4].article_id).to.equal(10);
                     })
             });
             it('POST returns (201) article added to database', () => {
