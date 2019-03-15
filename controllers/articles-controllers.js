@@ -46,7 +46,7 @@ const patchArticle = (req, res, next) => {
     updateArticle(req.params.article_id, req.body)
         .then(([article]) => {
             if (article) {
-                res.status(201).send({ article });
+                res.status(200).send({ article });
             } else {
                 throw({ code: 404, message: 'Article not found!' });
             };

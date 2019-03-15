@@ -1,10 +1,12 @@
 const { connection } = require('../connection');
 
-const selectCommentsByArticle = (article_id, {sort_by = 'created_at', order = 'desc'}) => {
+const selectCommentsByArticle = (article_id, {sort_by = 'created_at', order = 'desc', limit = 100, p = 1}) => {
     return connection('comments')
         .select('*')
         .where('article_id', article_id)
         .orderBy(sort_by, order)
+        .limit(limit)
+        .offset((p - 1) * limit)
 };
 
 const insertCommentByArticle = (article_id, comment) => {

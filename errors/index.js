@@ -15,6 +15,14 @@ const handle404 = (err, req, res, next) => {
     };
 };
 
+const handle405 = (err, req, res, next) => {
+    if (err.code === 405) {
+        res.status(405).send({ message: err.message });
+    } else {
+        next(err);
+    };
+};
+
 const handle422 = (err, req, res, next) => {
     if (err.code === 422) {
         res.status(422).send({ message: err.message });
@@ -28,4 +36,4 @@ const handle500 = (err, req, res, next) => {
     res.status(500).send({ message: err.message });
 };
 
-module.exports = { handle400, handle404, handle422, handle500 };
+module.exports = { handle400, handle404, handle405, handle422, handle500 };

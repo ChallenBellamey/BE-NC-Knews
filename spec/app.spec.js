@@ -11,6 +11,19 @@ describe('app', () => {
     after(() => connection.destroy())
 
     describe('/api', () => {
+
+        it('GET returns (200) and information about each end-point and available methods', () => {
+            return request
+                .get('/api')
+                .expect(200)
+                .then(({body}) => {
+                    expect(Object.keys(body.info.paths)).to.eql(['/api', '/api/users', '/api/users/:username', '/api/topics', '/api/articles', '/api/:article_id', '/api/articles/:article_id/comments', '/api/comments/:comment_id']);
+                    Object.keys(body.info.paths).forEach(pathKey => {
+                        expect(Object.keys(body.info.paths[pathKey])).to.eql(['GET', 'POST', 'PATCH', 'DELETE']);
+                    });
+                })
+        });
+
         describe('/users', () => {
             it('GET returns (200) users in database', () => {
                 return request
@@ -75,6 +88,17 @@ describe('app', () => {
                         expect(body.message).to.equal('User not found!');
                     })
             });
+            it('PATCH returns (405) method not allowed', () => {
+                return request
+                    .patch('/api/users')
+                    .send({ username: 'Challen' })
+                    .expect(405)
+            });
+            it('DELETE returns (405) method not allowed', () => {
+                return request 
+                    .delete('/api/users')
+                    .expect(405)
+            });
         });
         describe('/topics', () => {
             it('GET returns (200) topics in database', () => {
@@ -122,6 +146,17 @@ describe('app', () => {
                         expect(body.message).to.eql('Topic information not valid!');
                     });
             });
+            it('PATCH returns (405) method not allowed', () => {
+                return request
+                    .patch('/api/topics')
+                    .send({ slug: 'Slugs: the re-slugguning' })
+                    .expect(405)
+            });
+            it('DELETE returns (405) method not allowed', () => {
+                return request 
+                    .delete('/api/topics')
+                    .expect(405)
+            });
         });
         describe('/articles', () => {
             it('GET returns (200) articles in database', () => {
@@ -132,6 +167,7 @@ describe('app', () => {
                         body.articles.forEach(article => {
                             expect(Object.keys(article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count']);
                         });
+                        expect(body.articles.length).to.equal(12);
                     })
             });
             it('GET returns (200) articles in database when author query is added', () => {
@@ -154,7 +190,7 @@ describe('app', () => {
                         });
                     })
             });
-            it('GET  returns (200) articles in database when sort_by query is added', () => {
+            it('GET returns (200) articles in database when sort_by query is added', () => {
                 return request
                     .get('/api/articles?sort_by=article_id&order=asc')
                     .expect(200)
@@ -173,6 +209,17 @@ describe('app', () => {
                     .then(({body}) => {
                         expect(body.articles[0].article_id).to.equal(6);
                         expect(body.articles[4].article_id).to.equal(10);
+                    })
+            });
+            it('GET returns (200) standard results when passed an invalid sort_by query', () => {
+                return request 
+                    .get('/api/articles?sort_by=rating')
+                    .expect(200)
+                    .then(({body}) => {
+                        body.articles.forEach(article => {
+                            expect(Object.keys(article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count']);
+                        });
+                        expect(body.articles.length).to.equal(12);
                     })
             });
             it('POST returns (201) article added to database', () => {
@@ -207,6 +254,7 @@ describe('app', () => {
                     .expect(200)
                     .then(({ body }) => {
                         expect(body.article.article_id).to.equal(1);
+                        expect(Object.keys(body.article)).to.eql(['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count'])
                     })
             });
             it('GET returns (404) when passed an article_id parameter that does not exist', () => {
@@ -217,22 +265,22 @@ describe('app', () => {
                         expect(body.message).to.equal('Article not found!')
                     })
             });
-            it('PATCH (201) updates article when sent updates in body', () => {
+            it('PATCH (200) updates article when sent updates in body', () => {
                 return request
                     .patch('/api/articles/1')
                     .send({
                         body: 'Oops I meant this instead!'
                     })
-                    .expect(201)
+                    .expect(200)
                     .then(({body}) => {
                         expect(body.article.body).to.equal('Oops I meant this instead!');
                     })
             });
-            it('PATCH (201) increments vote when passed an inc_vote property', () => {
+            it('PATCH (200) increments vote when passed an inc_vote property', () => {
                 return request
                     .patch('/api/articles/1')
                     .send({inc_votes: 1})
-                    .expect(201)
+                    .expect(200)
                     .then(({body}) => {
                         expect(body.article.votes).to.equal(101);
                     })
@@ -252,6 +300,7 @@ describe('app', () => {
                             body.comments.forEach(comment => {
                                 expect(Object.keys(comment)).to.eql(['comment_id', 'author', 'article_id', 'votes', 'created_at', 'body']);
                             });
+                            expect(body.comments.length).to.equal(2);
                         })
                 });
                 it('GET by article_id returns (200) and an array of comments when sort_by query is added', () => {
@@ -265,6 +314,21 @@ describe('app', () => {
                                 };
                             })
                         })
+                });
+                it('GET returns (200) limited and pagenated comments when limit and p queries are added', () => {
+                    return request
+                        .get('/api/articles/1/comments?limit=5&p=2')
+                        .expect(200)
+                        .then(({body}) => {
+                            expect(body.comments[0].comment_id).to.equal(7)
+                            expect(body.comments[4].comment_id).to.equal(11)
+                            expect(body.comments.length).to.equal(5);
+                        })
+                });
+                it('GET returns (404) when passed non existent article_id', () => {
+                    return request
+                        .get('/api/articles/barrymanilow/comments')
+                        .expect(404)
                 });
                 it('POST by article_id returns (201) and the posted comment', () => {
                     return request
@@ -310,27 +374,38 @@ describe('app', () => {
                             expect(body.message).to.equal('Article not found!');
                         })
                 });
+                it('PATCH returns (405) method not allowed', () => {
+                    return request
+                        .patch('/api/articles/:article_id/comments')
+                        .send({ body: 'Oops I meant to say this instead!' })
+                        .expect(405)
+                });
+                it('DELETE returns (405) method not allowed', () => {
+                    return request 
+                        .delete('/api/articles/:article_id/comments')
+                        .expect(405)
+                });
             });
         });
         describe('/comments/:comment_id', () => {
-            it('PATCH returns (201) and the updated comment', () => {
+            it('PATCH returns (200) and the updated comment', () => {
                 return request
                     .patch('/api/comments/1')
                     .send({
                         body: 'Oops I meant to say this instead.'
                     })
-                    .expect(201)
+                    .expect(200)
                     .then(({body}) => {
                         expect(body.comment.body).to.equal('Oops I meant to say this instead.');
                     })
             });
-            it('PATCH returns (201) and updates the vote count when sent inc_votes', () => {
+            it('PATCH returns (200) and updates the vote count when sent inc_votes', () => {
                 return request
                     .patch('/api/comments/1')
                     .send({
                         inc_votes: 1
                     })
-                    .expect(201)
+                    .expect(200)
                     .then(({body}) => {
                         expect(body.comment.votes).to.equal(17);
                     })
@@ -339,6 +414,17 @@ describe('app', () => {
                 return request
                     .delete('/api/comments/1')
                     .expect(204)
+            });
+            it('GET returns (405) method not allowed', () => {
+                return request
+                    .get('/api/comments/:comment_id')
+                    .expect(405)
+            });
+            it('POST returns (405) method not allowed', () => {
+                return request 
+                    .post('/api/comments/:comment_id')
+                    .send({ body: 'Hi!' })
+                    .expect(405)
             });
         });
     });

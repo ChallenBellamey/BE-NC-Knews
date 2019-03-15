@@ -86,34 +86,6 @@ GET /api
 
 These have been split into **must haves** and some slightly more advanced _nice to have / if time_. The _if time_ tasks should be **left until you have tested and implemented all other functionality**.
 
-***
-
-
-
-
-
-
-```http
-GET /api/articles/:article_id/comments
-```
-
-##### If time  (the following will make pagination easier when you get to building your front-end application)
-- accept the following queries:
-  * `limit`, which limits the number of responses (defaults to 10)
-  * `p`, stands for page which specifies the page at which to start (calculated using limit)
-
-
-
-
-
-```http
-GET /api
-```
-##### Responds with
-- JSON describing all the available endpoints on your API
-
-***
-
 ### Step 3 - Hosting
 
 Make sure your application and your database is hosted using heroku

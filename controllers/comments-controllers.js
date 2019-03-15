@@ -6,7 +6,12 @@ const getCommentsByArticle = (req, res, next) => {
             res.status(200).send({ comments })
         })
         .catch(err => {
-            next({code: 500, message: `Unhandled error at getCommentsByArticle: ${err.code} ${err.message}`});
+            if (err.code === '22P02') {
+                err = { code: 404, message: 'Article not found!'}
+            } else {
+                err = {code: 500, message: `Unhandled error at getCommentsByArticle: ${err.code} ${err.message}`}
+            };
+            next(err);
         })
 };
 
@@ -30,7 +35,7 @@ const postCommentByArticle = (req, res, next) => {
 const patchComment = (req, res, next) => {
     updateComment(req.params.comment_id, req.body)
         .then(([comment]) => {
-            res.status(201).send({ comment });
+            res.status(200).send({ comment });
         })
         .catch(err => {
             next({ code: 500, message: `Unhandled error at patchComment: ${err.code} ${err.message}`});
