@@ -222,6 +222,14 @@ describe('app', () => {
                         expect(body.articles.length).to.equal(12);
                     })
             });
+            it('GET returns (400) when passed an article_id that is invalid', () => {
+                return request
+                    .get('/api/articles/abc')
+                    .expect(400) 
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Article id invalid!');
+                    })
+            });
             it('POST returns (201) article added to database', () => {
                 return request
                     .post('/api/articles')
@@ -285,6 +293,17 @@ describe('app', () => {
                         expect(body.article.votes).to.equal(101);
                     })
             });
+            it('PATCH returns (400) when passed invalid inc_votes parameter', () => {
+                return request
+                    .patch('/api/articles/1')
+                    .send({
+                        inc_votes: 'abc'
+                    })
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('inc_votes invalid!');
+                    })
+            });
             it('DELETE returns (204) when passed an article_id parameter', () => {
                 return request
                     .delete('/api/articles/1')
@@ -327,8 +346,19 @@ describe('app', () => {
                 });
                 it('GET returns (404) when passed non existent article_id', () => {
                     return request
-                        .get('/api/articles/barrymanilow/comments')
+                        .get('/api/articles/100/comments')
                         .expect(404)
+                        .then(({body}) => {
+                            expect(body.message).to.equal('Article not found!');
+                        })
+                });
+                it('GET returns (400) when passed an article_id that is invalid', () => {
+                    return request
+                        .get('/api/articles/abc/comments')
+                        .expect(400)
+                        .then(({body}) => {
+                            expect(body.message).to.equal('Article id invalid!')
+                        })
                 });
                 it('POST by article_id returns (201) and the posted comment', () => {
                     return request
@@ -374,6 +404,18 @@ describe('app', () => {
                             expect(body.message).to.equal('Article not found!');
                         })
                 });
+                it('POST returns (422) when passed a username that does not exist', () => {
+                    return request
+                        .post('/api/articles/1/comments')
+                        .send({
+                            author: 'Challen',
+                            body: 'Hi, I\'m new here'
+                        })
+                        .expect(422)
+                        .then(({body}) => {
+                            expect(body.message).to.equal('User does not exist!');
+                        })
+                });
                 it('PATCH returns (405) method not allowed', () => {
                     return request
                         .patch('/api/articles/:article_id/comments')
@@ -408,6 +450,39 @@ describe('app', () => {
                     .expect(200)
                     .then(({body}) => {
                         expect(body.comment.votes).to.equal(17);
+                    })
+            });
+            it('PATCH returns (400) when passed invalid inc_votes property', () => {
+                return request
+                    .patch('/api/comments/1')
+                    .send({
+                        inc_votes: 'abc'
+                    })
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Invalid inc_votes!');
+                    })
+            });
+            it('PATCH returns (404) when passed non existent comment_id', () => {
+                return request
+                    .patch('/api/comments/100')
+                    .send({
+                        inc_votes: 1
+                    })
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Comment not found!');
+                    })
+            });
+            it('PATCH returns (400) when passed invalid comment_id', () => {
+                return request
+                    .patch('/api/comments/abc')
+                    .send({
+                        inc_votes: 1
+                    })
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Invalid comment id!');
                     })
             });
             it('DELETE returns (204)', () => {

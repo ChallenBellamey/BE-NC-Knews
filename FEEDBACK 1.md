@@ -9,14 +9,6 @@
 
 ### /api/articles/:article_id
 
-11. GET status:400 URL contains an invalid article_id (e.g. "abc")
-
-    - **expected 400 "Bad Request", got 500 "Internal Server Error"**
-
-12. PATCH status:400 if given an invalid inc_votes
-
-    - **expected 400 "Bad Request", got 500 "Internal Server Error"**
-
 13. DELETE status:404 when given a non-existent article_id
 
     - **expected 404 "Not Found", got 204 "No Content"**
@@ -31,11 +23,6 @@
 
     - **don't necessarily need the article_id on each comment, but not worth changing**
 
-
-18. GET responds with 400 for an invalid article_id
-
-    - **expected 400 "Bad Request", got 500 "Internal Server Error"**
-
 19. POST responds with a 201 and the posted comment when given a valid article_id
 
     - **Post request should expects the body to have a key of `username` which we can convert to `author` for the model - this is primarily to make building the front-end easier**
@@ -44,25 +31,7 @@
 
     - **Post request should expects the body to have a key of `username` which we can convert to `author` for the model - this is primarily to make building the front-end easier**
 
-21. POST responds with a 422 when given a non-existent username
-
-    - **expected 422 "Unprocessable Entity", got 404 "Not Found"**
-
 ### /api/comments/:comment_id
-
-24. PATCH status:400 if given an invalid inc_votes
-
-    - **expected 400 "Bad Request", got 500 "Internal Server Error"**
-
-if typeof inc_votes !== 'number' throw({})
-
-25. PATCH status:404 non-existent comment_id is used
-
-    - **expected 404 "Not Found", got 201 "Created"**
-
-26. PATCH status:400 if invalid comment_id is used
-
-    - **expected 400 "Bad Request", got 500 "Internal Server Error"**
 
 27. DELETE status:404 client uses non-existent comment_id
 

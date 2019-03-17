@@ -6,7 +6,7 @@ const getArticles = (req, res, next) => {
             res.status(200).send({ articles });
         })
         .catch(err => {
-            next({code: 500, message: `Unhandled error at getArticles: ${err.code} ${err.message}`})
+            next({code: 500, message: `Unhandled error at getArticles: ${err.code} ${err.message}`});
         })
 };
 
@@ -35,7 +35,9 @@ const getArticle = (req, res, next) => {
             };  
         })
         .catch(err => {
-            if (err.code !== 404) {
+            if (err.code === '22P02') {
+                err = { code: 400, message: 'Article id invalid!' };
+            } else if (err.code !== 404) {
                 err = { code: 500, message: `Unhandled error at getArticle: ${err.code} ${err.message}`};
             };
             next(err);
@@ -52,7 +54,9 @@ const patchArticle = (req, res, next) => {
             };
         })
         .catch(err => {
-            if (err.code !== 404) {
+            if (err.code === '42703') {
+                err = { code: 400, message: 'inc_votes invalid!' };
+            } else if (err.code !== 404) {
                 err = { code: 500, message: `Unhandled error at patchArticle: ${err.code} ${err.message}`};
             };
             next(err);

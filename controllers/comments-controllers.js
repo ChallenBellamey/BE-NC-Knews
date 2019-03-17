@@ -3,12 +3,16 @@ const { selectCommentsByArticle, insertCommentByArticle, updateComment, delComme
 const getCommentsByArticle = (req, res, next) => {
     selectCommentsByArticle(req.params.article_id, req.query)
         .then(comments => {
-            res.status(200).send({ comments })
+            if (comments.length > 0) {
+                res.status(200).send({ comments });
+            } else {
+                throw({ code: 404, message: 'Article not found!' });
+            };
         })
         .catch(err => {
             if (err.code === '22P02') {
-                err = { code: 404, message: 'Article not found!'}
-            } else {
+                err = { code: 400, message: 'Article id invalid!'}
+            } else if (err.code !== 404) {
                 err = {code: 500, message: `Unhandled error at getCommentsByArticle: ${err.code} ${err.message}`}
             };
             next(err);
@@ -24,7 +28,11 @@ const postCommentByArticle = (req, res, next) => {
             if (err.code === '42703') {
                 err = { code: 400, message: 'Comment information not valid!' };
             } else if (err.code === '23503') {
-                err = { code: 404, message: 'Article not found!' };
+                if (err.message.slice(200, 207) === 'article') {
+                    err = { code: 404, message: 'Article not found!' };
+                } else if (err.message.slice(200, 206) === 'author') {
+                    err = { code: 422, message: 'User does not exist!' };
+                };
             } else {
                 err = {code: 500, message: `Unhandled error at postCommentByArticle: ${err.code} ${err.message}`};
             };
@@ -35,10 +43,21 @@ const postCommentByArticle = (req, res, next) => {
 const patchComment = (req, res, next) => {
     updateComment(req.params.comment_id, req.body)
         .then(([comment]) => {
-            res.status(200).send({ comment });
+            if (comment) {
+                res.status(200).send({ comment });
+            } else {
+                throw({ code: 404, message: 'Comment not found!' });
+            };
         })
         .catch(err => {
-            next({ code: 500, message: `Unhandled error at patchComment: ${err.code} ${err.message}`});
+            if (err.code === '22P02') {
+                err = { code: 400, message: 'Invalid comment id!'}
+            } else if (err.code === '42703') {
+                err = { code: 400, message: 'Invalid inc_votes!' };
+            } else if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at patchComment: ${err.code} ${err.message}` }
+            };
+            next(err);
         })
 };
 
