@@ -309,6 +309,22 @@ describe('app', () => {
                     .delete('/api/articles/1')
                     .expect(204)
             });
+            it('DELETE returns (400) when passed invalid article_id', () => {
+                return request
+                    .delete('/api/articles/invalid')
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Invalid article_id!');
+                    })
+            });
+            it('DELETE returns (404) when passed non-existent article_id', () => {
+                return request
+                    .delete('/api/articles/100')
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Article not found!');
+                    })
+            })
             describe('/comments', () => {
                 it('GET by article_id returns (200) and an array of comments', () => {
                     return request
@@ -490,14 +506,22 @@ describe('app', () => {
                     .delete('/api/comments/1')
                     .expect(204)
             });
+            it('DELETE returns (404) when passed non-existent comment_id', () => {
+                return request
+                    .delete('/api/comments/100')
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body.message).to.equal('Comment not found!');
+                    })
+            });
             it('GET returns (405) method not allowed', () => {
                 return request
-                    .get('/api/comments/:comment_id')
+                    .get('/api/comments/1')
                     .expect(405)
             });
             it('POST returns (405) method not allowed', () => {
                 return request 
-                    .post('/api/comments/:comment_id')
+                    .post('/api/comments/1')
                     .send({ body: 'Hi!' })
                     .expect(405)
             });

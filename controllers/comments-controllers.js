@@ -1,4 +1,4 @@
-const { selectCommentsByArticle, insertCommentByArticle, updateComment, delComment } = require('../models/comments-models')
+const { selectCommentById, selectCommentsByArticle, insertCommentByArticle, updateComment, delComment } = require('../models/comments-models')
 
 const getCommentsByArticle = (req, res, next) => {
     selectCommentsByArticle(req.params.article_id, req.query)
@@ -62,12 +62,25 @@ const patchComment = (req, res, next) => {
 };
 
 const deleteComment = (req, res, next) => {
-    delComment(req.params.comment_id)
+    Promise.all([
+        req.params.comment_id,
+        selectCommentById(req.params.comment_id)
+    ])
+        .then(([comment_id, comments]) => {
+            if (comments.length === 1) {
+                delComment(comment_id)
+            } else {
+                throw({ code: 404, message: 'Comment not found!' });
+            };
+        })
         .then(() => {
             res.sendStatus(204);
         })
         .catch(err => {
-            next({ code: 500, message: `Unhandled error at deleteComment: ${err.code} ${err.message}`})
+            if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at deleteComment: ${err.code} ${err.message}`}
+            };
+            next(err);
         })
 };
 

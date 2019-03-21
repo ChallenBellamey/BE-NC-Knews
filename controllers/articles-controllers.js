@@ -64,12 +64,27 @@ const patchArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-    delArticle(req.params.article_id)
+    Promise.all([
+        req.params.article_id,
+        selectArticle(req.params.article_id)
+    ])
+        .then(([article_id, articles]) => {
+            if (articles.length === 1) {
+                delArticle(article_id);
+            } else {
+                throw({ code: 404, message: 'Article not found!' });
+            };
+        })
         .then(() => {
             res.sendStatus(204);
         })
         .catch(err => {
-            next({ code: 500, message: `Unhandled error at deleteArticle: ${err.code} ${err.message}`});
+            if (err.code === '22P02') {
+                err = { code: 400, message: 'Invalid article_id!' }
+            } else if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at deleteArticle: ${err.code} ${err.message}`};
+            };
+            next(err)
         })
 };
 
