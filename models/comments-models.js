@@ -13,6 +13,8 @@ const insertCommentByArticle = (article_id, comment) => {
     comment.article_id = article_id;
     comment.created_at = new Date (Date.now());
     comment.votes = 0;
+    comment.author = comment.username;
+    delete comment.username;
     return connection('comments')
         .insert(comment)
         .returning('*')

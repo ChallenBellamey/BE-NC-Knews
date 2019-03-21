@@ -364,7 +364,7 @@ describe('app', () => {
                     return request
                         .post('/api/articles/1/comments')
                         .send({
-                            author: 'butter_bridge',
+                            username: 'butter_bridge',
                             body: 'Anyone here?'
                         })
                         .expect(201)
@@ -383,7 +383,7 @@ describe('app', () => {
                     return request
                         .post('/api/articles/1/comments')
                         .send({
-                            author: 'butter_bridge',
+                            username: 'butter_bridge',
                             title: 'Hello?',
                             body: 'Anyone here?'
                         })
@@ -396,7 +396,7 @@ describe('app', () => {
                     return request
                         .post('/api/articles/100/comments')
                         .send({
-                            author: 'butter_bridge',
+                            username: 'butter_bridge',
                             body: 'Anyone here?'
                         })
                         .expect(404)
@@ -408,7 +408,7 @@ describe('app', () => {
                     return request
                         .post('/api/articles/1/comments')
                         .send({
-                            author: 'Challen',
+                            username: 'Challen',
                             body: 'Hi, I\'m new here'
                         })
                         .expect(422)

@@ -23,14 +23,6 @@
 
     - **don't necessarily need the article_id on each comment, but not worth changing**
 
-19. POST responds with a 201 and the posted comment when given a valid article_id
-
-    - **Post request should expects the body to have a key of `username` which we can convert to `author` for the model - this is primarily to make building the front-end easier**
-
-20. POST responds with a 404 when given a non-existent article id
-
-    - **Post request should expects the body to have a key of `username` which we can convert to `author` for the model - this is primarily to make building the front-end easier**
-
 ### /api/comments/:comment_id
 
 27. DELETE status:404 client uses non-existent comment_id
