@@ -9,7 +9,8 @@
     "migrate-make": "knex migrate:make",
     "migrate-rollback": "knex migrate:rollback",
     "migrate-latest": "knex migrate:latest",
-    "test": "mocha ./spec/*.spec.js"
+    "test": "mocha ./spec/*.spec.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/northcoders/BE2-NC-Knews#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "heroku": "^7.22.7",
     "knex": "^0.15.2",
     "pg": "^7.8.2"
   },
