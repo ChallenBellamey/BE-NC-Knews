@@ -9,7 +9,7 @@
     "migrate-make": "knex migrate:make",
     "migrate-rollback": "knex migrate:rollback",
     "migrate-latest": "knex migrate:latest",
-    "test": "mocha ./spec/*.spec.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "repository": {
