@@ -9,8 +9,11 @@
     "migrate-make": "knex migrate:make",
     "migrate-rollback": "knex migrate:rollback",
     "migrate-latest": "knex migrate:latest",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "test": "mocha ./spec/*.spec.js",
+    "start": "node app.js",
+    "seed:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex seed:run",
+    "migrate:latest:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest",
+    "migrate:rollback:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback"
   },
   "repository": {
     "type": "git",
@@ -27,7 +30,7 @@
     "express": "^4.16.4",
     "heroku": "^7.22.7",
     "knex": "^0.15.2",
-    "pg": "^7.8.2"
+    "pg": "^7.9.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

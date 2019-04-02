@@ -1,6 +1,7 @@
 const {createRef, formatArticleData, formatCommentData } = require('../../utils/seedFunctions');
 const ENV = process.env.NODE_ENV || 'development';
-const { articleData, commentData, topicData, userData } = require(`../data/${ENV}-data/index`);
+const data = require('../data/index');
+const { articleData, commentData, topicData, userData } =  data;
 
 exports.seed = (knex, Promise) => {
     return knex.migrate
