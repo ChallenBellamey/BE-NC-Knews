@@ -1,5 +1,4 @@
 const {createRef, formatArticleData, formatCommentData } = require('../../utils/seedFunctions');
-const ENV = process.env.NODE_ENV || 'development';
 const data = require('../data/index');
 const { articleData, commentData, topicData, userData } =  data;
 
