@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/northcoders/BE2-NC-Knews#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "heroku": "^7.22.7",
     "knex": "^0.15.2",
