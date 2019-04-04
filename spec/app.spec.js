@@ -190,7 +190,7 @@ describe('app', () => {
                         });
                     })
             });
-            it('GET returns (200) articles in database when sort_by query is added', () => {
+            it('GET returns (200) articles in database when sort_by article_id query is added', () => {
                 return request
                     .get('/api/articles?sort_by=article_id&order=asc')
                     .expect(200)

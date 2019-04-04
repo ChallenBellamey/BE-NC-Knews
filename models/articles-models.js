@@ -1,7 +1,7 @@
 const { connection } = require('../connection');
 
 const selectArticles = ({ sort_by, order = 'desc', limit = 100, p = 1, ...conditions }) => {
-    const validSorts = ['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at']
+    const validSorts = ['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count']
     if (!validSorts.includes(sort_by)) {
         sort_by = 'created_at';
     };
