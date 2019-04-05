@@ -64,19 +64,10 @@ const patchArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-    Promise.all([
-        req.params.article_id,
-        selectArticle(req.params.article_id)
-    ])
-        .then(([article_id, articles]) => {
-            if (articles.length === 1) {
-                delArticle(article_id);
-            } else {
-                throw({ code: 404, message: 'Article not found!' });
-            };
-        })
-        .then(() => {
-            res.sendStatus(204);
+    delArticle(req.params.article_id)
+        .then((deletes) => {
+            if (deletes === 1) res.sendStatus(204)
+            else throw({ code: 404, message: 'Article not found!'})
         })
         .catch(err => {
             if (err.code === '22P02') {

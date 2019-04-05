@@ -284,7 +284,7 @@ describe('app', () => {
                         expect(body.article.body).to.equal('Oops I meant this instead!');
                     })
             });
-            it('PATCH (200) increments vote when passed an inc_vote property', () => {
+            it('PATCH (200) increments vote when passed an inc_votes property', () => {
                 return request
                     .patch('/api/articles/1')
                     .send({inc_votes: 1})
@@ -308,6 +308,10 @@ describe('app', () => {
                 return request
                     .delete('/api/articles/1')
                     .expect(204)
+                    .then(() => {
+                        return request.get('/api/articles/1')
+                            .expect(404)
+                    })
             });
             it('DELETE returns (400) when passed invalid article_id', () => {
                 return request

@@ -62,19 +62,10 @@ const patchComment = (req, res, next) => {
 };
 
 const deleteComment = (req, res, next) => {
-    Promise.all([
-        req.params.comment_id,
-        selectCommentById(req.params.comment_id)
-    ])
-        .then(([comment_id, comments]) => {
-            if (comments.length === 1) {
-                delComment(comment_id)
-            } else {
-                throw({ code: 404, message: 'Comment not found!' });
-            };
-        })
-        .then(() => {
-            res.sendStatus(204);
+    delComment(req.params.comment_id)
+        .then((deletes) => {
+            if (deletes === 1) res.sendStatus(204)
+            else throw({ code: 404, message: 'Comment not found!' })
         })
         .catch(err => {
             if (err.code !== 404) {
