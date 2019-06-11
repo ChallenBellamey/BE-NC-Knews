@@ -1,11 +1,20 @@
 const { connection } = require('../connection');
 
 const selectTopics = () => {
-    return connection('topics').select('*');
+    return connection('topics')
+        .select('*');
 };
 
 const insertTopic = (topic) => {
-    return connection('topics').insert(topic).returning('*');
+    return connection('topics')
+        .insert(topic)
+        .returning('*');
 };
 
-module.exports = { selectTopics, insertTopic };
+const delTopic = (slug) => {
+    return connection('topics')
+        .where('slug', slug)
+        .del();
+};
+
+module.exports = { selectTopics, insertTopic, delTopic };

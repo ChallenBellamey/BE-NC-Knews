@@ -1,4 +1,4 @@
-const { selectTopics, insertTopic } = require('../models/topics-models');
+const { selectTopics, insertTopic, delTopic } = require('../models/topics-models');
 
 const getTopics = (req, res, next) => {
     return selectTopics()
@@ -26,4 +26,18 @@ const postTopic = (req, res, next) => {
         });
 };
 
-module.exports = { getTopics, postTopic }
+const deleteTopic = (req, res, next) => {
+    delTopic(req.params.slug)
+        .then((deletes) => {
+            if (deletes === 1) res.sendStatus(204)
+            else throw({ code: 404, message: 'Topic not found!' })
+        })
+        .catch(err => {
+            if (err.code !== 404) {
+                err = { code: 500, message: `Unhandled error at deleteTopic: ${err.code} ${err.message}`}
+            };
+            next(err);
+        })
+};
+
+module.exports = { getTopics, postTopic, deleteTopic }
