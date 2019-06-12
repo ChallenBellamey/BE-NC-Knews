@@ -5,6 +5,16 @@ exports.createRef = (array, keyVal, val) => {
     }, {})
 };
 
+exports.formatUserData = (userData) => {
+    let newUserData = [ ...userData ];
+    return newUserData.map(user => {
+        const newUser = { ...user };
+        const date = newUser.last_online;
+        newUser.last_online = new Date (date);
+        return newUser;
+    })
+};
+
 exports.formatArticleData = (articleData) => {
     let newArticleData = [ ...articleData ];
     return newArticleData.map(article => {

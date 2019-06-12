@@ -1,4 +1,4 @@
-const {createRef, formatArticleData, formatCommentData } = require('../../utils/seedFunctions');
+const {createRef, formatUserData, formatArticleData, formatCommentData } = require('../../utils/seedFunctions');
 const data = require('../data/index');
 const { articleData, commentData, topicData, userData } =  data;
 
@@ -13,7 +13,7 @@ exports.seed = (knex, Promise) => {
         })
         .then(topicRows => {
             return knex('users')
-                .insert(userData)
+                .insert(formatUserData(userData))
                 .returning('*');
         })
         .then(userRows => {
