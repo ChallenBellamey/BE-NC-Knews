@@ -6,6 +6,9 @@ exports.up = function(knex, Promise) {
         .primary()
         .notNullable();
       userTable
+        .string('password', 32)
+        .notNullable();
+      userTable
         .string('name', 32);
       userTable
         .string('about', 64);
