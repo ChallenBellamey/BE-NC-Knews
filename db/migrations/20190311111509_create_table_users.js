@@ -6,9 +6,13 @@ exports.up = function(knex, Promise) {
         .primary()
         .notNullable();
       userTable
-        .string('avatar_url');
-      userTable
         .string('name', 32);
+      userTable
+        .string('about', 64);
+      userTable
+        .string('last_online')
+        .defaultTo(new Date ())
+        .notNullable();
   })
 };
 

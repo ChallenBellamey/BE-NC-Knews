@@ -1,17 +1,38 @@
 module.exports = [
   {
-    username: 'butter_bridge',
-    name: 'jonny',
-    avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+    username: 'tickle122',
+    name: 'Tom Tickle',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
   },
   {
-    username: 'icellusedkars',
-    name: 'sam',
-    avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+    username: 'grumpy19',
+    name: 'Paul Grump',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
   },
   {
-    username: 'rogersop',
-    name: 'paul',
-    avatar_url: 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4',
+    username: 'happyamy2016',
+    name: 'Amy Happy',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
+  },
+  {
+    username: 'cooljmessy',
+    name: 'Peter Messy',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
+  },
+  {
+    username: 'weegembump',
+    name: 'Gemma Bump',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
+  },
+  {
+    username: 'jessjelly',
+    name: 'Jess Jelly',
+    about: 'Hi, my name is Tom Tickle',
+    last_online: 1500000000000
   },
 ];
