@@ -8,6 +8,7 @@ const selectTopics = () => {
 const insertTopic = (topic) => {
     return connection('topics')
         .insert(topic)
+        console.log('here')
         .returning('*');
 };
 

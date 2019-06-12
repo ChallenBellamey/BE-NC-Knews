@@ -6,7 +6,7 @@ const getTopics = (req, res, next) => {
             res.status(200).send({ topics });
         })
         .catch(err => {
-            next({code: 500, message: 'Unhandled error at getTopics'})
+            next({code: 500, message: `Unhandled error at getTopics: ${err.code} ${err.message}`})
         })
 };
 
@@ -27,7 +27,7 @@ const postTopic = (req, res, next) => {
 };
 
 const deleteTopic = (req, res, next) => {
-    delTopic(req.params.slug)
+    return delTopic(req.params.slug)
         .then((deletes) => {
             if (deletes === 1) res.sendStatus(204)
             else throw({ code: 404, message: 'Topic not found!' })
