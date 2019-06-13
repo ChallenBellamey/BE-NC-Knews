@@ -13,8 +13,9 @@ exports.up = function(knex, Promise) {
       userTable
         .string('about', 64);
       userTable
-        .date('last_online')
-        .notNullable();
+        .timestamp('last_online')
+        .notNullable()
+        .defaultTo(knex.fn.now())
   })
 };
 

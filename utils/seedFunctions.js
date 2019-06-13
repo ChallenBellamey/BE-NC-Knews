@@ -9,7 +9,6 @@ exports.formatUserData = (userData) => {
     let newUserData = [ ...userData ];
     return newUserData.map(user => {
         const newUser = { ...user };
-        newUser.lastOnline = new Date(newUser.last_online);
         return newUser;
     })
 };
