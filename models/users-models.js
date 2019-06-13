@@ -23,14 +23,14 @@ const selectUser = ({username, password}) => {
 const loginUser = ({username}) => {
     return connection('users')
         .where('username', username)
-        .update({'online': true})
+        .update({'last_online': new Date()})
         .returning('*');
 };
 
 const logoutUser = ({username}) => {
     return connection('users')
         .where('username', username)
-        .update({'online': false, 'last_online': new Date()});
+        .update({'last_online': new Date()});
 };
 
 module.exports = { selectUsers, insertUser, selectUser, loginUser, logoutUser };
