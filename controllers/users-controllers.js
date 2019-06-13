@@ -40,7 +40,7 @@ const logInUser = (req, res, next) => {
             if (user) return loginUser({username: user.username})
             if (!user) throw({ code: 404, message: 'Username or password not valid' });
         })
-        .then((user) => {
+        .then(([user]) => {
             res.status(200).send({ user });
         })
         .catch(err => {
