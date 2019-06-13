@@ -13,8 +13,8 @@ exports.up = function(knex, Promise) {
       userTable
         .string('about', 64);
       userTable
-        .boolean('online')
-        .defaultTo(false);
+        .string('socket_id')
+        .defaultTo(null);
       userTable
         .string('last_online')
         .defaultTo(new Date ())

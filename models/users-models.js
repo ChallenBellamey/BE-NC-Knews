@@ -2,7 +2,7 @@ const { connection } = require('../connection')
 
 const selectUsers = () => {
     return connection('users')
-        .select('users.username', 'users.online', 'users.last_online')
+        .select('users.username', 'users.socket', 'users.last_online')
         .from('users')
         .orderBy('last_online', 'desc')
         .limit(10)
@@ -20,17 +20,17 @@ const selectUser = ({username, password}) => {
         .where({'username': username, 'password': password})
 };
 
-const loginUser = ({username}) => {
+const loginUser = ({username, socket}) => {
     return connection('users')
         .where('username', username)
-        .update({'online': true})
+        .update({'socket_id': socket.id})
         .returning('*');
 };
 
-const logoutUser = ({username}) => {
+const logoutUser = ({socket_id}) => {
     return connection('users')
-        .where('username', username)
-        .update({'online': false, 'last_online': new Date()});
+        .where('socket_id', socket_id)
+        .update({'socket_id': null, 'last_online': new Date()});
 };
 
 module.exports = { selectUsers, insertUser, selectUser, loginUser, logoutUser };
