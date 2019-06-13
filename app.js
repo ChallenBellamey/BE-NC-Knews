@@ -5,7 +5,6 @@ const { apiRouter } = require('./routes/api-router');
 const { handle400, handle404, handle405, handle422, handle500 } = require('./errors')
 
 app.use(cors());
-app.use(cors({ origin: 'https://cb-nc-knews.netlify.com', credentials: false }));
 app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
