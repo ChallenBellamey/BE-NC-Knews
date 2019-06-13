@@ -9,7 +9,6 @@ const selectUsers = () => {
 };
 
 const insertUser = (user) => {
-    user.last_online = new Date();
     return connection('users')
         .insert(user)
         .returning('*')
