@@ -18,7 +18,7 @@ const getUsers = (req, res, next) => {
             res.status(200).send({ users });
         })
         .catch(err => {
-            next({code: 500, message: `Unhandled error at getUsers: ${err.code} ${err.message}`})
+            next({code: 500, message: 'Unhandled error at getUsers'})
         })
 };
 
