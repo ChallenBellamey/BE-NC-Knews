@@ -35,13 +35,10 @@ const logUser = (req, res, next) => {
 };
 
 const logInUser = (req, res, next) => {
-    return selectUser(req.body)
+    return loginUser(req.body)
         .then(([user]) => {
-            if (user) return loginUser({username: user.username})
-            if (!user) throw({ code: 404, message: 'Username or password not valid' });
-        })
-        .then(([user]) => {
-            res.status(200).send({ user });
+            if (user) res.status(200).send({ user });
+            throw({code: 23502});
         })
         .catch(err => {
             if (err.code === '23502') {

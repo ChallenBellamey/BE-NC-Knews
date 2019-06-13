@@ -9,8 +9,9 @@ exports.formatUserData = (userData) => {
     let newUserData = [ ...userData ];
     return newUserData.map(user => {
         const newUser = { ...user };
-        const date = newUser.last_online;
-        newUser.last_online = new Date (date);
+        const date = new Date(newUser.last_online);
+        date.setTime(date.getTime() + date.getTimezoneOffset());
+        newUser.last_online = `${Math.floor(date.getDate() / 10)}${date.getDate() % 10}/${Math.floor(date.getMonth() / 10)}${date.getMonth() % 10}/${date.getFullYear()} ${Math.floor(date.getHours() / 10)}${date.getHours() % 10}:${date.getMinutes()}`;
         return newUser;
     })
 };
