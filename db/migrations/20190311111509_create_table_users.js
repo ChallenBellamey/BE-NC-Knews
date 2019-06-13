@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
         .string('about', 64);
       userTable
         .string('last_online')
-        .defaultTo(new Date ())
+        .defaultTo(new Date())
         .notNullable();
   })
 };
