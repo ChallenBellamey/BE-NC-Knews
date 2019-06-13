@@ -13,7 +13,7 @@ exports.up = function(knex, Promise) {
       userTable
         .string('about', 64);
       userTable
-        .string('last_online')
+        .date('last_online')
         .notNullable();
   })
 };

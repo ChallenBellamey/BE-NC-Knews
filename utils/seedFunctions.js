@@ -9,9 +9,7 @@ exports.formatUserData = (userData) => {
     let newUserData = [ ...userData ];
     return newUserData.map(user => {
         const newUser = { ...user };
-        const date = new Date(newUser.last_online);
-        date.setTime(date.getTime() + date.getTimezoneOffset());
-        newUser.last_online = `${Math.floor(date.getDate() / 10)}${date.getDate() % 10}/${Math.floor(date.getMonth() / 10)}${date.getMonth() % 10}/${date.getFullYear()} ${Math.floor(date.getHours() / 10)}${date.getHours() % 10}:${date.getMinutes()}`;
+        newUser.lastOnline = new Date(newUser.last_online);
         return newUser;
     })
 };
@@ -20,8 +18,7 @@ exports.formatArticleData = (articleData) => {
     let newArticleData = [ ...articleData ];
     return newArticleData.map(article => {
         const newArticle = { ...article };
-        const date = newArticle.created_at;
-        newArticle.created_at = new Date (date);
+        newArticle.created_at = new Date (newArticle.created_at);
         return newArticle;
     })
 };
