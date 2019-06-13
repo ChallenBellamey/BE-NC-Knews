@@ -4,7 +4,7 @@ module.exports = [
     password: 'tickle122',
     name: 'Tom Tickle',
     about: 'Hi, my name is Tom Tickle',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
   {
@@ -12,7 +12,7 @@ module.exports = [
     password: 'grumpy19',
     name: 'Paul Grump',
     about: 'Hi, my name is Paul Grump',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
   {
@@ -20,7 +20,7 @@ module.exports = [
     password: 'happyamy2016',
     name: 'Amy Happy',
     about: 'Hi, my name is Amy Happy',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
   {
@@ -28,7 +28,7 @@ module.exports = [
     password: 'cooljmessy',
     name: 'Peter Messy',
     about: 'Hi, my name is Peter Messy',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
   {
@@ -36,7 +36,7 @@ module.exports = [
     password: 'weegembump',
     name: 'Gemma Bump',
     about: 'Hi, my name is Gemma Bump',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
   {
@@ -44,7 +44,7 @@ module.exports = [
     password: 'jessjelly',
     name: 'Jess Jelly',
     about: 'Hi, my name is Jess Jelly',
-    socket_id: null,
+    online: false,
     last_online: 1500000000000
   },
 ];

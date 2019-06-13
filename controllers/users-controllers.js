@@ -1,16 +1,4 @@
 const { selectUsers, insertUser, selectUser, loginUser, logoutUser } = require('../models/users-models');
-const {app} = require('../app.js');
-
-// Socket
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-io.on('connection', function(client) {
-  
-    client.on('disconnect', function() {
-      logOutUser(client.id);
-    });
-  });
 
 const getUsers = (req, res, next) => {
     return selectUsers(req.body)
@@ -38,11 +26,18 @@ const postUser = (req, res, next) => {
         });
 };
 
+const logUser = (req, res, next) => {
+    if (req.body.log === 'In') {
+        logInUser(req, res, next);
+    } else if (req.body.log === 'Out') {
+        logOutUser(req, res, next);
+    };
+};
+
 const logInUser = (req, res, next) => {
-    const {username, password, socket} = req.body;
-    return selectUser({username, password})
+    return selectUser(req.body)
         .then(([user]) => {
-            if (user) return loginUser({username, socket})
+            if (user) return loginUser({username: user.username})
             if (!user) throw({ code: 404, message: 'Username or password not valid' });
         })
         .then(([user]) => {
@@ -67,4 +62,4 @@ const logOutUser = (req, res, next) => {
         });
 };
 
-module.exports = { getUsers, postUser, logInUser };
+module.exports = { getUsers, postUser, logUser };
