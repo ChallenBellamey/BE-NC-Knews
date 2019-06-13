@@ -1,7 +1,7 @@
 const { selectUsers, insertUser, selectUser, loginUser, logoutUser } = require('../models/users-models');
 
 const getUsers = (req, res, next) => {
-    return selectUsers()
+    return selectUsers(req.body)
         .then(users => {
             res.status(200).send({ users });
         })
