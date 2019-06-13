@@ -2,7 +2,7 @@ const { connection } = require('../connection')
 
 const selectUsers = () => {
     return connection('users')
-        .select('users.username', 'users.name', 'users.online', 'users.last_online')
+        .select('users.username', 'users.online', 'users.last_online')
         .from('users')
         .orderBy('last_online', 'desc')
         .limit(10)
