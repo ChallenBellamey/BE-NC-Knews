@@ -1,4 +1,4 @@
-const { selectUsers, insertUser, selectUser } = require('../models/users-models');
+const { selectUsers, insertUser, selectUser, loginUser, logoutUser } = require('../models/users-models');
 
 const getUsers = (req, res, next) => {
     return selectUsers()
@@ -26,16 +26,40 @@ const postUser = (req, res, next) => {
         });
 };
 
-const getUser = (req, res, next) => {
-    return selectUser(req.params.username)
-        .then(([user]) => {
-            if (user === undefined) {
-                throw({ code: 404, message: 'User not found!' })
-            } else {
-                res.status(200).send({ user });
-            };  
-        })
-        .catch(next);
+const logUser = (req, res, next) => {
+    if (req.body.log === 'In') {
+        logInUser(req, res, next);
+    } else if (req.body.log === 'Out') {
+        logOutUser(req, res, next);
+    };
 };
 
-module.exports = { getUsers, postUser, getUser };
+const logInUser = (req, res, next) => {
+    return selectUser(req.body)
+        .then(([user]) => {
+            if (user) return loginUser({username: user.username})
+            if (!user) throw({ code: 404, message: 'Username or password not valid' });
+        })
+        .then((user) => {
+            res.status(200).send({ user });
+        })
+        .catch(err => {
+            if (err.code === '23502') {
+                next({ code: 400, message: 'Username or password not valid!' });
+            } else {
+                next(err);
+            };
+        });
+};
+
+const logOutUser = (req, res, next) => {
+    return logoutUser(req.body)
+        .then(() => {
+            res.status(200).send();
+        })
+        .catch(err => {
+            next(err);
+        });
+};
+
+module.exports = { getUsers, postUser, logUser };

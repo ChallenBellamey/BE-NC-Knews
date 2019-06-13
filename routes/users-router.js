@@ -1,5 +1,5 @@
 const usersRouter = require('express').Router();
-const { getUsers, postUser, getUser } = require('../controllers/users-controllers');
+const { getUsers, postUser, logUser } = require('../controllers/users-controllers');
 
 usersRouter.route('/')
     .get(getUsers)
@@ -9,7 +9,7 @@ usersRouter.route('/')
     })
 
 usersRouter.route('/:username')
-    .get(getUser)
+    .post(logUser)
     .all((res, req, next) => {
         next({ code: 405, message: 'Method not allowed '});
     })

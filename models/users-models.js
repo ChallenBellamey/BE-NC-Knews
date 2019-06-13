@@ -11,10 +11,23 @@ const insertUser = (user) => {
         .returning('*')
 };
 
-const selectUser = (username) => {
+const selectUser = ({username, password}) => {
     return connection('users')
         .select('*')
-        .where('username', username)
+        .where({'username': username, 'password': password})
 };
 
-module.exports = { selectUsers, insertUser, selectUser };
+const loginUser = ({username}) => {
+    return connection('users')
+        .where('username', username)
+        .update({'online': true})
+        .returning('*');
+};
+
+const logoutUser = ({username}) => {
+    return connection('users')
+        .where('username', username)
+        .update({'online': false, 'last_online': new Date()});
+};
+
+module.exports = { selectUsers, insertUser, selectUser, loginUser, logoutUser };
