@@ -4,6 +4,8 @@ const {app} = require('../app.js');
 // Socket
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+http.listen(app.get('port'));
+
 io.on('connection', function(client) {
   
     client.on('disconnect', function() {
