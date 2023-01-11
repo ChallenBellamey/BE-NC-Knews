@@ -30,7 +30,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "heroku": "^7.22.7",
-    "knex": "^0.15.2",
+    "knex": "^2.4.0",
     "pg": "^7.9.0"
   },
   "devDependencies": {
